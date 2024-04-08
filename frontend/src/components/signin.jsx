@@ -22,7 +22,6 @@ const [isOpen, setIsOpen] = useState(false);
         username,
               })
       .then((res) => {
-        console.log(res.data);
         const response = Object.keys(res.data);
         if (!response.includes("created")) {
           setEmail("");

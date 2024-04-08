@@ -1,20 +1,25 @@
-import  { useState } from 'react';
+import  { useState} from 'react';
 import { NavLink,useNavigate} from 'react-router-dom';
 
 function Header({isAdmin}) {
+ 
   const [open, setOpen] = useState(false);
 
   const navigate = useNavigate();
   return (
     <>
-      <div className="lg:hidden z-10" >
+      <div className="lg:hidden z-1000">
         <nav
           className={`absolute inset-0 transform lg:transform-none lg:opacity-100 duration-200 lg:relative z-10 w-80 bg-white text-white h-screen p-3 shadow-md ${
-            open ? 'translate-x-0  ease-in opacity-100' : '-translate-x-full ease-out opacity-0'
+            open
+              ? "translate-x-0  ease-in opacity-100"
+              : "-translate-x-full ease-out opacity-0"
           }`}
         >
           <div className="flex justify-between">
-            <span className="font-bold text-2xl sm:text-3xl p-2 text-black">Sidebar</span>
+            <span className="font-bold text-2xl sm:text-3xl p-2 text-black">
+              Sidebar
+            </span>
             <button
               className="p-2 focus:outline-none  rounded-md lg:hidden"
               onClick={() => setOpen(false)}
@@ -26,36 +31,51 @@ function Header({isAdmin}) {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
               </svg>
             </button>
           </div>
           <ul className="mt-8 ">
-            <li >
-            <NavLink
-              to="/home"
-              className={({isActive}) => 
-                ` hover:text-orange-600 ${isActive ? "text-orange-700" : "text-black"} block px-4 py-2`
-              }
-            >Home
-            </NavLink>
-            
-            <NavLink
-              to="/uploadcourses"
-              className={({isActive}  ) => 
-                ` hover:text-orange-600 ${isActive ? "text-orange-700" : "text-black"}  px-4 py-2 `}
-             style={{ display: isAdmin ? 'block' : 'none' }}
-            >
-             UploadCourses 
-            </NavLink>
-            <NavLink
-              to="/purchasedcourse"
-              className={({isActive}  ) => 
-                ` hover:text-orange-600 ${isActive ? "text-orange-700" : "text-black"}  block px-4 py-2`
-              }
-            >
-             Purchasedcourse 
-            </NavLink>
+            <li>
+              <NavLink
+                to="/home"
+                className={({ isActive }) =>
+                  ` hover:text-orange-600 ${
+                    isActive ? "text-orange-700" : "text-black"
+                  } block px-4 py-2`
+                }
+              >
+                Home
+              </NavLink>
+
+              <NavLink
+                to="/uploadcourses"
+                className={({ isActive }) =>
+                  ` hover:text-orange-600 ${
+                    isActive ? "text-orange-700" : "text-black"
+                  }  px-4 py-2 `
+                }
+                style={{ display: isAdmin ? "block" : "none" }}
+              >
+                UploadCourses
+              </NavLink>
+              <NavLink
+               to={{pathname :"/purchasedcourse"}}
+ state={{from: isAdmin}}
+
+                className={({ isActive }) =>
+                  ` hover:text-orange-600 ${
+                    isActive ? "text-orange-700" : "text-black"
+                  }  block px-4 py-2`
+                }
+              >
+                Purchasedcourse
+              </NavLink>
             </li>
           </ul>
         </nav>
@@ -73,50 +93,64 @@ function Header({isAdmin}) {
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
             </svg>
           </button>
           <div className="text-xl font-bold flex items-center pl-3 ">
-            <span className='text-black'>Get</span>
+            <span className="text-black">Get</span>
             <span className="text-orange-600">better</span>
             <span className="text-gray-400">*</span>
           </div>
           <div className="lg:w-1/4 space-x-2  lg:flex justify-between items-center hidden  ">
             <NavLink
               to="/home"
-              className={({isActive}) => 
-                ` hover:text-orange-600 ${isActive ? "text-orange-600" : "text-black"}`
+              className={({ isActive }) =>
+                ` hover:text-orange-600 ${
+                  isActive ? "text-orange-600" : "text-black"
+                }`
               }
             >
               Home
             </NavLink>
-           
+
             <NavLink
               to="/uploadcourses"
-              className={({isActive}  ) => 
-                ` hover:text-orange-600 ${isActive ? "text-orange-700" : "text-black"}`}
-                style={{visibility : isAdmin ? "visible" : 'hidden'}}
-                
-
-              
+              className={({ isActive }) =>
+                ` hover:text-orange-600 ${
+                  isActive ? "text-orange-700" : "text-black"
+                }`
+              }
+              style={{ display: isAdmin ? "block" : "none" }}
             >
-             UploadCourses 
+              UploadCourses
             </NavLink>
             <NavLink
-              to="/purchasedcourse"
-              className={({isActive}  ) => 
-                ` hover:text-orange-600 ${isActive ? "text-orange-700" : "text-black"}`
+            to={{pathname :"/purchasedcourse"}}
+ state={{from: isAdmin}}
+            
+              className={({ isActive }) =>
+                ` hover:text-orange-600 ${
+                  isActive ? "text-orange-700" : "text-black"
+                }`
               }
             >
-             Purchasedcourse 
+              Purchasedcourse
             </NavLink>
           </div>
           <div className="space-x-2 pr-9  ">
-            <button className="text-white bg-orange-600 p-2 rounded-lg" onClick={()=>{
-                localStorage.removeItem("authtoken")
-                navigate("/login")
-            }}>
-             Logout 
+            <button
+              className="text-white bg-orange-600 p-2 rounded-lg"
+              onClick={() => {
+                localStorage.removeItem("authtoken");
+                navigate("/login");
+              }}
+            >
+              Logout
             </button>
           </div>
         </header>

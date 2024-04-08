@@ -8,31 +8,29 @@ async function userverification(req,res,next){
 if (!auth?.startsWith("Bearer ")) return res.json({ "status": "header not found" });
 
 const Token = auth.split(' ')[1];
-console.log(Token);
 try {
-    const decoded = jwt.verify(Token,"23032004");
-    console.log(decoded);
-    req.authenticated;
+    const decoded = jwt.verify(Token,"your secret key");
     
+  
+
     next();
 } catch (error) {
     console.error("Token verification failed:", error);
-    return res.status(401).json({ "status": "Unauthorized" });
+    return res.status(400).json({ "status": "Unauthorized" });
 }
 
 }
 
 function checkuser(req,res,next){
-    const email= "ashishlakhimale23@gmail.com"
-    const password = "ashishlakhimale23"
+    const email= "admin's email"
+    const password = "admin's password"
 const auth = req.headers.authorization || req.headers.Authorization;
 
 if (!auth?.startsWith("Bearer ")) return res.json({ "status": "header not found" });
 
 const Token = auth.split(' ')[1];
 console.log(Token);
-    const decoded = jwt.verify(Token,"23032004");
-    console.log(decoded);
+    const decoded = jwt.verify(Token,"your secret key");
     const response = bcrpty.compare(password,decoded.password) 
     if(decoded.email === email && response){
         next()

@@ -2,7 +2,7 @@ import Header from "./header"
 import Footer from "./footer"
 import { useState,useCallback } from "react";
 import axios from "axios";
-
+import toast,{Toaster} from "react-hot-toast"
 
 
 function UploadCourses(){
@@ -11,31 +11,41 @@ function UploadCourses(){
     const [price,setPrice] = useState("")
     const [file, setFile] = useState(null);
     const [syllabus,setSyllabus] = useState("")
+    const [isAdmin,setIsAdmin] = useState(true)
    
     
 const triggerhandel = useCallback(async () => {
      const auth = axios.defaults.headers.common['Authorization'];
 console.log(auth)
 const Token = auth.split(' ')[1]; 
+if(title ===""||
+description==="" ||
+price === ""||
+syllabus===""|| file===null){
+  toast.error("please fill the form completely",{
+      style: {
+        background: '#333',
+        color: '#fff',
+      },
+    }
+)
+return 
+}
 delete axios.defaults.headers.common["Authorization"];
     try {
         if (!file) {
             return null;
         }
+
         const formData = new FormData();
          formData.append("file", file);
-         formData.append("tags", "coursefiles");
-         formData.append("upload_preset", "coursefiles"); 
-         formData.append("api_key", "993344952783557"); 
-         console.log(formData)
+         formData.append("upload_preset", "your uplaod preset"); 
+         formData.append("api_key", "your api key"); 
          
-        console.log(file)
-        const response = await axios.post("https://api.cloudinary.com/v1_1/ddweepkue/image/upload",formData) 
-        console.log(response.data.secure_url)     
+        const response = await axios.post("https://api.cloudinary.com/v1_1/your cloud name/image/upload",formData) 
      
 axios.defaults.headers.common["Authorization"] = `Bearer ${Token}`
 
-                console.log("header set ")
         const res = await axios.post("http://localhost:8000/user/course", {
             title,
             description,
@@ -44,7 +54,6 @@ axios.defaults.headers.common["Authorization"] = `Bearer ${Token}`
             fileurl:response.data.secure_url
         });
 
-        console.log(res.data);
         const keys = Object.keys(res.data);
         if (!keys.includes("task")) {
             setTitle("");
@@ -52,9 +61,22 @@ axios.defaults.headers.common["Authorization"] = `Bearer ${Token}`
             setPrice("");
             setFile(null);
             setSyllabus("");
+ toast.error('trouble to uploaded', {
+      style: {
+        background: '#333',
+        color: '#fff',
+      },
+    }); 
            
 
         } else {
+toast.success('uploaded', {
+      style: {
+        background: '#333',
+        color: '#fff',
+      },
+    }); 
+ 
             setTitle("");
             setDescription("");
             setPrice("");
@@ -70,7 +92,6 @@ axios.defaults.headers.common["Authorization"] = `Bearer ${Token}`
 }, [description, price, file, title]);
 
   const handleFileChange = (event) => {
-    console.log(event.target.files[0]);
     setFile(event.target.files[0]);
   };
   const handelsubmit = useCallback(
@@ -82,8 +103,7 @@ axios.defaults.headers.common["Authorization"] = `Bearer ${Token}`
   );
     return (
       <>
-        <Header></Header>
-        
+      <Header isAdmin={isAdmin}/>  
         <div className="min-h-screen  flex justify-center items-center   ">
           <form
             action=""
@@ -165,8 +185,8 @@ axios.defaults.headers.common["Authorization"] = `Bearer ${Token}`
             </div>
           </form>
         </div>
-
-        <Footer></Footer>
+        <Footer/>
+        <Toaster/>
       </>
     );
 }

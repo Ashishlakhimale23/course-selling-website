@@ -1,14 +1,24 @@
 import axios from "axios"
-function Replycard({fileurl,title,price}){
+import toast,{Toaster} from "react-hot-toast"
+function Replycard({fileurl,title,price,_id,purchased}){
     const handlepurchase = async ()=>{
-        const response = await axios.post(`http://localhost:8000/user/course/${title}`)
-        console.log(response.data)
+        const response = await axios.post(`http://localhost:8000/user/course/${_id}`)
         if(!Object.keys(response.data).includes("task")){
-            alert("purchased failed")
+           toast.error('purchased failed', {
+      style: {
+        background: '#333',
+        color: '#fff',
+      },
+    }); 
 
         }
         else{
-            alert("purchased")
+toast.success('purchased', {
+      style: {
+        background: '#333',
+        color: '#fff',
+      },
+    }); 
         }
 
     } 
@@ -24,11 +34,13 @@ function Replycard({fileurl,title,price}){
                 <span className="block text-2xl font-sans mb-2">{title}</span>
                 <label htmlFor="" className="">Price</label>
                 <span className="block text-lg font-semibold mb-2">${price}</span>
-                <button className="w-full bg-blue-700 text-white py-3 text-xl rounded-3xl" onClick={handlepurchase}>Buy Now</button>
+                <button className="w-full bg-blue-700 text-white py-3 text-xl rounded-3xl" style={{display : purchased ? "block" : "none"}}>purchased</button>
+                <button className="w-full bg-blue-700 text-white py-3 text-xl rounded-3xl" onClick={handlepurchase} style={{display : purchased ? "none" : "block"}}>Buy Now</button>
 
 
             </div>
         </div>
+        <Toaster/>
         </>
     )
 }

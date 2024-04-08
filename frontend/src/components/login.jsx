@@ -8,33 +8,36 @@ function Login() {
   const [password, setPassword] = useState("");
   let token;
 
-  const triggersubmit = useCallback(async () => {
-    await axios
-      .post("http://localhost:8000/user/login",{email,password})
-      .then((res) => {
-        token = res.data.token;
-        console.log(res.data.token);
-        setEmail("");
-        setPassword("");
-        localStorage.setItem("authtoken", token);
+ const triggersubmit = useCallback(async () => {
 
-        navigate("/");
-      })
-      .catch((error) => {
-        console.log(error);
-        alert("user not found or wrong password");
-        setEmail("");
-        setPassword("");
-      });
-  }, [email,password,token]);
-  const handelsubmit = useCallback(
-    (e) => {
-      e.preventDefault();
-      triggersubmit();
-    },
-    [triggersubmit],
-  );
+  try {
+    const res = await axios.post("http://localhost:8000/user/login", { email, password });
+    if(Object.values(res.data).includes("incomplete") || Object.values(res.data).includes("inpassword") ){
+      alert("signin please")
+      navigate("/signin")
+    }
+    else{    const token = res.data.token;
+    setEmail("");
+    setPassword("");
+    localStorage.setItem("authtoken", token);
+   
+    navigate("/home");}
+  } catch (error) {
+    
+    console.log(error);
+   
+    setEmail("");
+    setPassword("");
+  }
+}, [email, password, navigate]);
+
+const handelsubmit = useCallback((e) => {
+  e.preventDefault();
+  triggersubmit();
+}, [triggersubmit]);
+ 
   return (
+    <>
     <div className="min-h-screen flex flex-col justify-center">
       <form
         action=""
@@ -83,6 +86,7 @@ function Login() {
         </div>
       </form>
     </div>
+      </>
   );
 }
 export default Login;

@@ -24,7 +24,21 @@ const couser = new mongoose.Schema({
     syllabus:{
         type:String,
         required:true
-    }
+    },
+    lectures:[
+        {
+            title:{
+                type:String,
+                required:true
+            },
+            vediourl:{
+                type:String,
+                required:true,
+            }
+
+
+        }
+    ]
    
 })
 

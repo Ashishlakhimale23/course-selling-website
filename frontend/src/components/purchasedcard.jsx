@@ -1,6 +1,9 @@
 import {useNavigate} from "react-router-dom"
-function Card({fileurl,title,price,syllabus,description,isAdmin,_id,purchased}){
+function PurchasedCard({fileurl,title,price,syllabus,description,isAdmin,_id,courselecture}){
     const navigate = useNavigate();
+    let courselectures = [];
+    courselectures.push(courselecture)
+
     const datatosend = {
         _id:_id,
         description:description,
@@ -8,12 +11,16 @@ function Card({fileurl,title,price,syllabus,description,isAdmin,_id,purchased}){
         title:title,
         price:price,
         fileurl:fileurl,
-        purchased:purchased
+        purchased:true
+        
         
     }
     const uploaddata = {
         _id:_id,
     }
+    const coursedata = {
+        courselecture:courselectures
+    } 
     const handleupload =() =>{
         navigate("/uploadlectures",{state:{data:{uploaddata}}})
     }
@@ -30,11 +37,11 @@ function Card({fileurl,title,price,syllabus,description,isAdmin,_id,purchased}){
                 <span className="block text-lg font-semibold">${price}</span>
                 <button className="w-full bg-blue-700 text-white py-3 text-xl rounded-3xl" onClick= {()=>navigate("/coursedetails",{state:{data:{datatosend}}})}>View Details</button>
                 <button className="w-full bg-blue-700 text-white py-3 text-xl rounded-3xl" style={{display:isAdmin ? "block" : "none"}} onClick={handleupload}>Upload</button>
-
+                <button className="w-full bg-blue-700 text-white py-3 text-xl rounded-3xl" onClick={()=>navigate("/coursecontent",{state:{data:{coursedata}}})} >View the content</button>
 
             </div>
         </div>
         </>
     )
 }
-export default Card 
+export default PurchasedCard
